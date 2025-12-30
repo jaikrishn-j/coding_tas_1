@@ -30,7 +30,7 @@ const CubeLogo: React.FC = () => {
     const header2Ref = useRef<HTMLDivElement>(null);
     const cubeRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    // State to handle mobile sizing logic
+    
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const CubeLogo: React.FC = () => {
     const interpolate = (start: number, end: number, progress: number): number =>
         start + (end - start) * progress;
 
-    // Use a variable for cube size: 80px for mobile, 150px for desktop
+    
     const cubeSize = isMobile ? 50 : 150;
     const halfSize = cubeSize / 2;
 
@@ -67,7 +67,7 @@ const CubeLogo: React.FC = () => {
                 onUpdate: (self) => {
                     const progress = self.progress;
 
-                    // 1. Logo Blur & Fade
+                    
                     const initialProgress = Math.min(progress * 20, 1);
                     const logoOpacityProgress = progress >= 0.02 ? Math.min((progress - 0.02) * 100, 1) : 0;
                     if (logoRef.current) {
@@ -75,13 +75,12 @@ const CubeLogo: React.FC = () => {
                         logoRef.current.style.opacity = (1 - logoOpacityProgress).toString();
                     }
 
-                    // 2. Cubes Container Fade
+                    
                     const cubesOpacityProgress = progress > 0.01 ? Math.min((progress - 0.01) * 100, 1) : 0;
                     if (cubesContainerRef.current) {
                         cubesContainerRef.current.style.opacity = cubesOpacityProgress.toString();
                     }
 
-                    // 3. Header 1 (Moved lower on mobile via CSS, animated here)
                     const header1Progress = Math.min(progress * 2.5, 1);
                     if (header1Ref.current) {
                         header1Ref.current.style.transform = `translate(-50%, -50%) scale(${interpolate(1, 1.2, header1Progress)})`;
@@ -89,7 +88,6 @@ const CubeLogo: React.FC = () => {
                         header1Ref.current.style.opacity = (1 - header1Progress).toString();
                     }
 
-                    // 4. Header 2
                     const header2StartProgress = (progress - 0.4) * 10;
                     const header2Progress = Math.max(0, Math.min(header2StartProgress, 1));
                     if (header2Ref.current) {
@@ -98,7 +96,6 @@ const CubeLogo: React.FC = () => {
                         header2Ref.current.style.opacity = header2Progress.toString();
                     }
 
-                    // 5. Cube Movement Logic
                     const firstPhaseProgress = Math.min(progress * 2, 1);
                     const secondPhaseProgress = progress >= 0.5 ? (progress - 0.5) * 2 : 0;
 
@@ -108,12 +105,11 @@ const CubeLogo: React.FC = () => {
 
                         const { initial, final } = data;
 
-                        // MOBILE OVERRIDE: Start from Logo Position (Top: 20%, Left: 50%)
                         const startTop = isMobile ? 20 : initial.top;
                         const startLeft = isMobile ? 50 : initial.left;
-                        const startZ = isMobile ? -500 : initial.z; // Start closer on mobile for better visibility
+                        const startZ = isMobile ? -500 : initial.z; 
 
-                        // Horizontal spread adjustment for mobile final position
+                        
                         const targetLeft = isMobile
                             ? (final.left > 50 ? final.left - 10 : final.left + 10)
                             : final.left;
@@ -122,7 +118,7 @@ const CubeLogo: React.FC = () => {
                         const currentLeft = interpolate(startLeft, targetLeft, firstPhaseProgress);
                         const currentZ = interpolate(startZ, final.z, firstPhaseProgress);
 
-                        // Add a scale effect on mobile so they grow out of the logo
+                        
                         const currentScale = isMobile ? interpolate(0.1, 1, firstPhaseProgress) : 1;
 
                         const currentRotateX = interpolate(initial.rotateX, final.rotateX, firstPhaseProgress);
@@ -153,7 +149,7 @@ const CubeLogo: React.FC = () => {
     return (
         <section ref={sectionRef} className="relative w-screen h-screen overflow-hidden bg-[#331707] text-[#ffe9d9]">
 
-            {/* LOGO: Moves higher on mobile to make room for text */}
+            
             <div ref={logoRef} className="absolute top-[20%] md:top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-3 md:gap-6 z-[2]">
                 <div className="flex flex-col justify-end">
                     <div className="w-[20px] h-[20px] md:w-[35px] md:h-[35px] bg-[#ffe9d9] rotate-[42deg] origin-bottom-right"></div>
@@ -169,7 +165,7 @@ const CubeLogo: React.FC = () => {
                 </div>
             </div>
 
-            {/* CUBES CONTAINER */}
+            
             <div ref={cubesContainerRef} className="absolute inset-0 opacity-0 [transform-style:preserve-3d] [perspective:10000px]">
                 {Object.keys(cubesData).map((key, index) => (
                     <div
@@ -200,14 +196,14 @@ const CubeLogo: React.FC = () => {
                 ))}
             </div>
 
-            {/* HEADER 1: Moved to top-[60%] on mobile to be below the logo */}
+            
             <div ref={header1Ref} className="absolute top-[60%] md:top-1/2 left-1/2 w-screen text-center flex justify-center font-serif">
                 <h1 className='text-center font-[400] text-[32px] md:text-[61px] w-[90%] md:w-3/4 leading-tight'>
                     The First Media Company crafted For the Digital First generation
                 </h1>
             </div>
 
-            {/* HEADER 2: Mobile responsive padding/text size */}
+            
             <div ref={header2Ref} className="absolute top-1/2 left-1/2 w-screen text-center opacity-0 blur-lg flex justify-center flex-col items-center font-sans">
                 <h2 className="mb-2 text-xl md:text-2xl font-[700] w-[80%] md:w-1/3">Where innovation meets precision.</h2>
                 <p className="text-xs md:text-sm font-[100] w-1/4 md:w-1/3">
